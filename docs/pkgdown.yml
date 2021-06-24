@@ -1,0 +1,10 @@
+pandoc: 2.10.1
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  citationSearch: citationSearch.html
+  index: index.html
+  search: search.html
+  webscrape: webscrape.html
+last_built: 2021-06-23T06:08Z
+

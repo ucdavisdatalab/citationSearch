@@ -1,0 +1,50 @@
+
+---
+title: "Indexing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette describes how the indices are constructed from each library's 
+collection.
+
+Each library's collection is reduced to the following fields for an index:  
+
+- Authors
+- Year
+- Title
+- DOI
+- LCCN
+- Publisher
+- Keywords
+- Description
+- Combined
+- MiscID
+
+`Combined` is a concatenation of Authors, Title and Publisher fields.
+`MiscID` refers to the library specific id for that record.
+
+# Building the Indexes
+-----------
+Each index can be construced using functions from the package:
+
+
+```{r, eval=FALSE}
+library(citationSearch)
+index_nfsl_data()
+index_treesearch_data()
+index_blm_data()
+```
+
+Each function has two optional arguments: data, and conn.   
+
+`data` is a dataframe, if left out, then the package will use the preloaded
+dataframes containing the library collections that are included in the 
+citationSearch package. Otherwise, pass a dataframe generated 
+from the webscraping component of this package. 
+
+`conn` is a solrium::SolrClient object. If argument is left blank it uses the
+default connection created by solrium::SolrClient$new()

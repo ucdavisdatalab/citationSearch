@@ -1,0 +1,91 @@
+---
+title: "citationSearch"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+# Overview
+
+This package is meant to support the workflow for Dr. Tyler Scott's project
+analysing citations from Environmental Impact Reports. The citations were
+extracted using anystyle
+
+The workflow involves searching the citations extracted from the Environmental
+Impact Reports against online libraries that house documents. It has three
+steps:
+
+1. download library collections
+2. index library collections
+3. search library collections
+
+citationSearch has the functions and datafiles for each step in this workflow.
+In addition, user provided data can be used instead of the built in 
+citationSearch data.
+
+# Setup
+
+citationSearch uses [Solr](https://solr.apache.org/) - Apache's search platform 
+built on Lucene. For the package to run, you need to have an instance of solr 
+running on your system.
+
+To setup solr on your system, follow the instructions from the 'solrium' 
+[documentation](https://docs.ropensci.org/solrium/articles/local_setup.html).
+
+If you installed solr with homebrew it doens't seem to come with example data,
+so just artart it with `solr start -c`.
+
+There needs to be a solr instance running on the system to index, or search
+documents using this package.
+
+Navigate to http://localhost:8983/solr/ to see if solr is running.
+
+# 1. Getting the Collections
+
+citationSearch has built-in datasets containing the full extent of the library 
+collections at the time of downloading (June 2021).
+
+These can be accessed with citationSearch attached.
+
+```{r}
+library(citationSearch)
+head(treesearch)
+head(nfsl)
+head(blm)
+```
+
+Check out the 'Webscraping' vignette for information on how to 
+redownload/update the full collections.
+
+# 2. Indexing the Collections
+
+To search against the downloaded libraries, the data needs to be indexed and
+saved as a collection in solr.
+
+Check out the 'Indexing' vignette for more information about what these 
+functions do.
+
+
+```{r, eval=FALSE}
+index_nfsl_data()
+index_treesearch_data()
+index_blm_data()
+```
+
+# 3. Searching the Collections
+
+Search the collections by converting the anystyle entries into search queries, and using the `search_colleciton()` package to get the top results.
+
+citationSearch comes with the anystyle data built in and accessible through the `anystyle` name.
+
+```{r}
+entry = anystyle[1,] # take first row as an example
+results = search_collection("treesearch", search_construct_query(entry))
+results
+```
+
+See 'Searching' vignette for more information.
