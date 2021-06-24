@@ -22,13 +22,7 @@ R CMD BUILD
 R CMD INSTALL
 ```
 
-or with devtools
-
-```
-devtools::install_github("ucdavisdatalab/citationSearch")
-```
-
-or from within project directory
+or with devtools from within project directory
 
 ```
 devtools::install()
