@@ -68,7 +68,7 @@ search_construct_query = function(anystyle_entry) {
 
     authors = unlist(anystyle_entry$author)
     if (length(authors) > 0) {
-	authors = paste0("Author:", authors)
+	authors = paste0("Authors:", authors)
 	authors = paste0(authors, collapse=" ")
     } else {
 	authors = ""
