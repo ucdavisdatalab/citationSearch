@@ -10,6 +10,9 @@ preprocess_anystyle_entry = function(anystyle_entry) {
 	string = stringr::str_remove_all(string, '\r')
 	string = stringr::str_remove_all(string, '\n')
 	string = stringr::str_remove_all(string, '\t')
+
+	# remove punctuation
+	string = stringr::str_remove_all(string, "[[:punct:]]")
     }
 
     anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "doi" )]
