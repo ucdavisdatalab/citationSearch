@@ -2,6 +2,39 @@
 # search_construct_query
 # search_collection 
 
+preprocess_anystyle_entry = function(anystyle_entry) {
+
+    normalize_string = function(string) {
+	# remove all " \r \n \t
+	string = stringr::str_remove_all(string, '"')
+	string = stringr::str_remove_all(string, '\r')
+	string = stringr::str_remove_all(string, '\n')
+	string = stringr::str_remove_all(string, '\t')
+    }
+
+    anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "doi" )]
+
+    # for each field except author take only the first entry
+    anystyle_entry$date = anystyle_entry$date[[1]][1]
+    anystyle_entry$publisher = anystyle_entry$publisher[[1]][1]
+    anystyle_entry$doi = anystyle_entry$doi[[1]][1]
+    anystyle_entry$title = anystyle_entry$title[[1]][1]
+
+    # for author get only the unique rows from the dataframe
+    unique_authors = unique(anystyle_entry$author[[1]])
+    anystyle_entry$author = list(unique_authors)
+
+    # remove potentially problematic characters
+    anystyle_entry$title = normalize_string(anystyle_entry$title)
+    anystyle_entry$publisher = normalize_string(anystyle_entry$publisher)
+
+    # convert to year naively
+    anystyle_entry$date = substr(anystyle_entry$date, 1, 4)
+    
+
+    anystyle_entry
+}
+
 
 #' Convert Anystyle item to a search query string
 #' takes row, returns string
@@ -12,80 +45,41 @@
 #' @export
 search_construct_query = function(anystyle_entry) {
 
-    # simplify
-    anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "doi" )]
+    add_field_identifier = function (field, fieldname) {
+	if (is.null(field)) {
+	    return("")
+	}
 
-    normalize_year = function(anystyle_date) {
-	y = unlist(anystyle_date)
-	y = unlist(lapply(y, strsplit, "-"))
-	y = y[nchar(y) == 4]
-	ux <- unique(y)
-	ux[which.max(tabulate(match(y, ux)))]
-    }
+	field = trimws(field)
 
-    normalize_string = function(string) {
-	# remove all " \r \n \t
-	string = stringr::str_remove_all(string, '"')
-	string = stringr::str_remove_all(string, '\r')
-	string = stringr::str_remove_all(string, '\n')
-	string = stringr::str_remove_all(string, '\t')
+	if (nchar(field) == 0) {
+	    return("")
+	}
+
+	field = strsplit(field, " ")[[1]]
+	field = na.omit(field)
+	field = paste0(fieldname, field)
+	paste0(field, collapse=" ")
     }
 
     query_string = ""
 
-    # author -> Authors
+    anystyle_entry = preprocess_anystyle_entry(anystyle_entry)
+
     authors = unlist(anystyle_entry$author)
-    authors = authors[!is.na(authors)]
     if (length(authors) > 0) {
-    authors = paste0("Authors:", authors)
-    authors = paste0(authors, collapse=" ")
+	authors = paste0("Author:", authors)
+	authors = paste0(authors, collapse=" ")
     } else {
 	authors = ""
     }
 
-    # date -> Year
-    year = as.numeric(normalize_year(anystyle_entry$date))
-    if (is.null(year)) {
-	year = ""
-    } else {
-        year = paste0("Year:", year)
-    }
+    publisher = add_field_identifier(anystyle_entry$publisher, "Publisher:")
+    title = add_field_identifier(anystyle_entry$title, "Title:")
+    year = add_field_identifier(anystyle_entry$date, "Year:")
+    doi = add_field_identifier(anystyle_entry$doi, "DOI:")
 
-    # title -> Title
-    title = unlist(anystyle_entry$title) 
-    if ( nchar(trimws(title)) > 0) {
-    title = paste0(title, collapse=" ")
-    title = strsplit(title, " ")[[1]]
-    title = paste0("Title:", title)
-    title = paste0(title, collapse=" ")
-    } else {
-	title = ""
-    }
-
-    # doi -> DOI
-    doi = unlist(anystyle_entry$doi)
-    doi = doi[[1]]
-    if (is.null(doi)) {
-	doi = ""
-    } else {
-	doi = paste0("DOI", publisher)
-    }
-
-    # publisher -> Publisher
-    publisher = unlist(anystyle_entry$publisher)
-    publisher = paste0(publisher, collapse=" ")
-
-    if ( nchar(trimws(publisher)) > 0) {
-        publisher = strsplit(publisher, " ")[[1]]
-        publisher = paste0("Publisher:", publisher)
-        publisher = paste0(publisher, collapse=" ")
-    } else {
-	publisher =""
-    }
-
-    # query string
     query_string = paste(authors, year, title, doi, publisher)
-    query_string = normalize_string(query_string)
 }
 
 
