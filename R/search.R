@@ -12,6 +12,9 @@
 #' @export
 search_construct_query = function(anystyle_entry) {
 
+    # simplify
+    anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "doi" )]
+
     normalize_year = function(anystyle_date) {
 	y = unlist(anystyle_date)
 	y = unlist(lapply(y, strsplit, "-"))
