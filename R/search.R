@@ -46,7 +46,7 @@ preprocess_anystyle_entry = function(anystyle_entry) {
 search_construct_query = function(anystyle_entry) {
 
     add_field_identifier = function (field, fieldname) {
-	if (is.null(field)) {
+	if (is.null(field) | any(is.na(field))) {
 	    return("")
 	}
 
