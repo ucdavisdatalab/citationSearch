@@ -105,7 +105,10 @@ search_collection = function(collection_name, query_string, conn=NULL) {
 				   name= collection_name,
 				   params = list(
 						 q = query_string,
-						 fl = c("Title", "Authors", "Publisher", "Year", "DOI", "score"),
+						 fl = c("Title", "Authors", 
+							"Publisher", "Year", 
+							"DOI", "Source",
+							"score"),
 						 rows = 5)
     )
 }
