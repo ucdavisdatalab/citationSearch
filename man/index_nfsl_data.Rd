@@ -4,12 +4,14 @@
 \alias{index_nfsl_data}
 \title{Create index from nfsl dataset}
 \usage{
-index_nfsl_data(data = NULL, conn = NULL)
+index_nfsl_data(data = NULL, conn = NULL, overwrite = FALSE)
 }
 \arguments{
 \item{data}{optional dataframe of nfsl data}
 
 \item{conn}{optional solrclient connection object}
+
+\item{overwrite}{optional bool delete and recreate collection if exists}
 }
 \description{
 Create index from nfsl dataset

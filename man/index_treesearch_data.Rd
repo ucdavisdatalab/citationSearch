@@ -4,12 +4,14 @@
 \alias{index_treesearch_data}
 \title{Create index from Treesearch dataset}
 \usage{
-index_treesearch_data(data = NULL, conn = NULL)
+index_treesearch_data(data = NULL, conn = NULL, overwrite = FALSE)
 }
 \arguments{
 \item{data}{optional dataframe of treesearch data}
 
 \item{conn}{optional solrclient connection object}
+
+\item{overwrite}{optional bool delete and recreate collection if exists}
 }
 \description{
 Create index from Treesearch dataset

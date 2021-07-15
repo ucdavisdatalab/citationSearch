@@ -4,12 +4,12 @@
 \alias{index_blm_data}
 \title{Create index from blm dataset}
 \usage{
-index_blm_data(data = NULL, conn = NULL)
+index_blm_data(data = NULL, conn = NULL, overwrite = FALSE)
 }
 \arguments{
 \item{data}{optional dataframe of nfsl data}
 
-\item{conn}{optional solrclient connection object}
+\item{conn}{overwrite bool delete and recreate collection if exists}
 }
 \description{
 Create index from blm dataset
