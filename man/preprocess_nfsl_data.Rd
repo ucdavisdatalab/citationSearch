@@ -9,6 +9,9 @@ preprocess_nfsl_data(nfsl_data)
 \arguments{
 \item{nfsl_data}{dataframe of nfsl record metadata}
 }
+\value{
+dataframe of preprocessed ready to be indexed data
+}
 \description{
 Preprocess NFSL data
 }

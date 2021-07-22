@@ -10,6 +10,63 @@
 # 
 #
 
+#' Preprocess Web of Science data
+#'
+#' @param wos_data dataframe of web of science data
+#' @return dataframe of preprocessed ready to be indexed data
+preprocess_wos_data = function(wos_data) { 
+    # remove columns that aren't needed
+    wos_data = wos_data[, c("DOI", "Publication Year", "Article Title",
+			    "Authors", "Source Title")]
+    # rename to match index
+    colnames(wos_data) = c("DOI", "Year", "Title", "Authors", "Publisher")
+
+    # add missing columns
+    wos_data$Combined = create_combined(wos_data$Authors, wos_data$Publisher)
+    wos_data$Source = "WOS Forestry"
+    wos_data$MiscID = paste0("WOS_", 1:nrow(wos_data))
+    wos_data
+}
+
+#' Create index from Web of Science dataset
+#'
+#'
+#' @param data optional dataframe of wos data
+#' @param conn optional solrclient connection object
+#' @param overwrite optional bool delete and recreate collection if exists 
+#' @export
+#' @import solrium
+index_wos_data = function(data = NULL, conn = NULL, overwrite=FALSE) {
+
+    if (is.null(data)) {
+	data = citationSearch::wos # loads from package data
+    }
+
+    if (is.null(conn)) {
+	# use the default connection info
+	conn = solrium::SolrClient$new()
+    }
+
+    if (collection_exists(conn, "wos")) { 
+	if (overwrite) {
+	    collection_delete(conn, name="wos")
+	} else {
+	    warning("'wos' Collection already exits, not overwriting\n")
+	    return()
+	}
+    }
+
+    data = preprocess_wos_data(data)
+
+    # create collection (also called index)
+    collection_create(conn, name="wos", numShards = 1)
+
+    # add documents
+    conn$add(data, "wos")
+
+    return()
+}
+
 #' Create Combined column for authors and publishers
 #'
 #'
@@ -26,6 +83,7 @@ create_combined = function(authors, publishers) {
 #' Preprocess NFSL data
 #'
 #' @param nfsl_data dataframe of nfsl record metadata
+#' @return dataframe of preprocessed ready to be indexed data
 preprocess_nfsl_data = function(nfsl_data) {
     # remove unneded columns and rename to match index fields
     nfsl_data = nfsl_data[ ,c("title", "authors", "year",  
@@ -60,7 +118,7 @@ preprocess_nfsl_data = function(nfsl_data) {
 index_nfsl_data = function(data = NULL, conn = NULL, overwrite=FALSE) {
 
     if (is.null(data)) {
-	data = nfsl # loads from package data
+	data = citationSearch::nfsl # loads from package data
     }
 
     if (is.null(conn)) {
@@ -119,7 +177,7 @@ preprocess_blm_data = function(blm_data) {
 index_blm_data = function(data = NULL, conn = NULL, overwrite=FALSE) {
 
     if (is.null(data)) {
-	data = blm # loads from package data
+	data = citationSearch::blm # loads from package data
     }
 
     if (is.null(conn)) {
@@ -177,7 +235,7 @@ preprocess_treesearch_data = function(treesearch_data) {
 index_treesearch_data = function(data = NULL, conn = NULL, overwrite=FALSE) {
 
     if (is.null(data)) {
-	data = treesearch # loads from package data
+	data = citationSearch::treesearch # loads from package data
     }
 
     if (is.null(conn)) {
@@ -215,18 +273,22 @@ index_treesearch_data = function(data = NULL, conn = NULL, overwrite=FALSE) {
 #' @export 
 #' @import solrium
 index_all = function(nfsl_data= NULL, blm_data=NULL, treesearch_data=NULL,
-		     conn=NULL, overwrite=FALSE) {
+		     wos_data= NULL, conn=NULL, overwrite=FALSE) {
 
     if (is.null(nfsl_data)) {
-	nfsl_data = nfsl # loads from package data
+	nfsl_data = citationSearch::nfsl # loads from package data
     }
 
     if (is.null(blm_data)) {
-	blm_data = blm # loads from package data
+	blm_data = citationSearch::blm # loads from package data
     }
 
     if (is.null(treesearch_data)) {
-	treesearch_data = treesearch # loads from package data
+	treesearch_data = citationSearch::treesearch # loads from package data
+    }
+
+    if (is.null(wos_data)) {
+	wos_data = citationSearch::wos # loads from package data
     }
 
     if (is.null(conn)) {
@@ -246,7 +308,8 @@ index_all = function(nfsl_data= NULL, blm_data=NULL, treesearch_data=NULL,
     nfsl_data = preprocess_nfsl_data(nfsl_data)
     blm_data = preprocess_blm_data(blm_data)
     treesearch_data = preprocess_treesearch_data(treesearch_data)
-    all_data = rbind(nfsl_data, blm_data, treesearch_data)
+    wos_data = preprocess_wos_data(wos_data)
+    all_data = rbind(nfsl_data, blm_data, treesearch_data, wos_data)
 
     # create collection (also called index)
     collection_create(conn, name="all", numShards = 1)
