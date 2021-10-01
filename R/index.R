@@ -19,10 +19,10 @@ preprocess_wos_data = function(wos_data) {
     wos_data = wos_data[, c("DOI", "Publication Year", "Article Title",
 			    "Authors", "Source Title")]
     # rename to match index
-    colnames(wos_data) = c("DOI", "Year", "Title", "Authors", "Publisher")
+    colnames(wos_data) = c("DOI", "Year", "Title", "Authors", "Journal Title")
 
     # add missing columns
-    wos_data$Combined = create_combined(wos_data$Authors, wos_data$Publisher)
+    wos_data$Combined = create_combined(wos_data$Authors, wos_data$`Journal Title`)
     wos_data$Source = "WOS Forestry"
     wos_data$MiscID = paste0("WOS_", 1:nrow(wos_data))
     wos_data
@@ -211,14 +211,14 @@ index_blm_data = function(data = NULL, conn = NULL, overwrite=FALSE) {
 preprocess_treesearch_data = function(treesearch_data) {
 
     treesearch_data = treesearch_data[ ,c("title", "authors", "year", 
-					  "source", "treesearch_id", "doi") ]
+					  "pub_series","source", "treesearch_id", "doi") ]
 
     colnames(treesearch_data) = c("Title", "Authors", "Year", 
-				  "Publisher", "MiscID", "DOI")
+				  "Publisher", "Journal Title", "MiscID", "DOI")
 
     # add missing fields (Combined)
     treesearch_data$Combined = create_combined(treesearch_data$Authors, 
-					       treesearch_data$Publisher)
+					       treesearch_data$`Journal Title`)
     treesearch_data$Source = "Treesearch"
 
     return(treesearch_data)
