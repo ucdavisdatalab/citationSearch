@@ -15,13 +15,14 @@ preprocess_anystyle_entry = function(anystyle_entry) {
 	string = stringr::str_remove_all(string, "[[:punct:]]")
     }
 
-    anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "doi" )]
+    anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "container-title", "doi" )]
 
     # for each field except author take only the first entry
     anystyle_entry$date = anystyle_entry$date[[1]][1]
     anystyle_entry$publisher = anystyle_entry$publisher[[1]][1]
     anystyle_entry$doi = anystyle_entry$doi[[1]][1]
     anystyle_entry$title = anystyle_entry$title[[1]][1]
+    anystyle_entry$`container-title` = anystyle_entry$`container-title`[[1]][1]
 
     # for author get only the unique rows from the dataframe
     unique_authors = unique(anystyle_entry$author[[1]])
@@ -30,6 +31,7 @@ preprocess_anystyle_entry = function(anystyle_entry) {
     # remove potentially problematic characters
     anystyle_entry$title = normalize_string(anystyle_entry$title)
     anystyle_entry$publisher = normalize_string(anystyle_entry$publisher)
+    anystyle_entry$`container-title` = normalize_string(anystyle_entry$`container-title`)
 
     # convert to year naively
     anystyle_entry$date = substr(anystyle_entry$date, 1, 4)
@@ -49,7 +51,7 @@ preprocess_anystyle_entry = function(anystyle_entry) {
 search_construct_query = function(anystyle_entry) {
 
     add_field_identifier = function (field, fieldname) {
-	if (is.null(field) | any(is.na(field))) {
+if (is.null(field) | any(is.na(field))) {
 	    return("")
 	}
 
@@ -76,13 +78,13 @@ search_construct_query = function(anystyle_entry) {
     } else {
 	authors = ""
     }
-
+    journalTitle = add_field_identifier(anystyle_entry$`container-title`, 'Journal:')
     publisher = add_field_identifier(anystyle_entry$publisher, "Publisher:")
     title = add_field_identifier(anystyle_entry$title, "Title:")
     year = add_field_identifier(anystyle_entry$date, "Year:")
     doi = add_field_identifier(anystyle_entry$doi, "DOI:")
 
-    query_string = paste(authors, year, title, doi, publisher)
+    query_string = paste(authors, year, title, doi, publisher, journalTitle)
 }
 
 
