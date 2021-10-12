@@ -5,14 +5,14 @@
 preprocess_anystyle_entry = function(anystyle_entry) {
 
     normalize_string = function(string) {
-	# remove all " \r \n \t
-	string = stringr::str_remove_all(string, '"')
-	string = stringr::str_remove_all(string, '\r')
-	string = stringr::str_remove_all(string, '\n')
-	string = stringr::str_remove_all(string, '\t')
-
-	# remove punctuation
-	string = stringr::str_remove_all(string, "[[:punct:]]")
+      	# remove all " \r \n \t
+    	string = stringr::str_remove_all(string, '"')
+    	string = stringr::str_remove_all(string, '\r')
+    	string = stringr::str_remove_all(string, '\n')
+    	string = stringr::str_remove_all(string, '\t')
+  
+  	  # remove punctuation
+  	  string = stringr::str_remove_all(string, "[[:punct:]]")
     }
 
     anystyle_entry = anystyle_entry[ , c("author", "date", "title", "publisher", "container-title", "doi" )]
@@ -51,20 +51,20 @@ preprocess_anystyle_entry = function(anystyle_entry) {
 search_construct_query = function(anystyle_entry) {
 
     add_field_identifier = function (field, fieldname) {
-if (is.null(field) | any(is.na(field))) {
-	    return("")
-	}
-
-	field = trimws(field)
-
-	if (nchar(field) == 0) {
-	    return("")
-	}
-
-	field = strsplit(field, " ")[[1]]
-	field = na.omit(field)
-	field = paste0(fieldname, field)
-	paste0(field, collapse=" ")
+      if (is.null(field) | any(is.na(field))) {
+      	    return("")
+      	}
+      
+      field = trimws(field)
+      
+      if (nchar(field) == 0) {
+      	    return("")
+      	}
+      
+    	field = strsplit(field, " ")[[1]]
+    	field = na.omit(field)
+    	field = paste0(fieldname, field)
+    	paste0(field, collapse=" ")
     }
 
     query_string = ""
@@ -73,14 +73,16 @@ if (is.null(field) | any(is.na(field))) {
 
     authors = unlist(anystyle_entry$author)
     if (length(authors) > 0) {
-	authors = paste0("Authors:", authors)
-	authors = paste0(authors, collapse=" ")
+    	authors = paste0("Authors:", authors)
+    	authors = paste0(authors, collapse=" ")
     } else {
-	authors = ""
+	    authors = ""
     }
+    
     journalTitle = add_field_identifier(anystyle_entry$`container-title`, 'Journal:')
     publisher = add_field_identifier(anystyle_entry$publisher, "Publisher:")
-    title = add_field_identifier(anystyle_entry$title, "Title:")
+    # Want phrases for the title instead of word
+    title = ifelse(is.null(t1$title[[1]]), "Title:", paste0("Title:",t1$title))
     year = add_field_identifier(anystyle_entry$date, "Year:")
     doi = add_field_identifier(anystyle_entry$doi, "DOI:")
 
