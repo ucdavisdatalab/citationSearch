@@ -2,6 +2,11 @@
 # search_construct_query
 # search_collection 
 
+#' Preprocess an anystyle entry so that it can be searched with
+#'
+#' @param anystyle_entry dataframe
+#' @return dataframe
+#' @importFrom stringr str_remove_all
 preprocess_anystyle_entry = function(anystyle_entry) {
 
     normalize_string = function(string) {
@@ -36,7 +41,6 @@ preprocess_anystyle_entry = function(anystyle_entry) {
     # convert to year naively
     anystyle_entry$date = substr(anystyle_entry$date, 1, 4)
     
-
     anystyle_entry
 }
 
@@ -46,7 +50,6 @@ preprocess_anystyle_entry = function(anystyle_entry) {
 #'
 #' @param anystyle_entry single row from anystyle output
 #' @return string suitable for solr search
-#' @import stringr
 #' @export
 search_construct_query = function(anystyle_entry) {
 
@@ -96,7 +99,7 @@ search_construct_query = function(anystyle_entry) {
 #' @param query_string created with construct_query function
 #' @param conn optional SolrClient object
 #' @return dataframe of top 5 results
-#' @import solrium
+#' @importFrom solrium SolrClient solr_search
 #' @export
 #'
 search_collection = function(collection_name, query_string, conn=NULL) {

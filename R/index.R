@@ -1,10 +1,11 @@
 
-#Helper function to detect if two sets of string vectors EQUAL to each other
+#' Helper function to detect if two sets of string vectors EQUAL to each other
 #'
 #'
 #' @param string a set of strings 
 #' @param pattern the format to search against the string
 #' @return a list of bool 
+#' @importFrom purrr map
 rdetect = function(string, pattern){
   string %>% purrr::map(function(s){
     s == pattern
@@ -15,6 +16,7 @@ rdetect = function(string, pattern){
 #' 
 #' 
 #' @param df dataframe to validate if it has expected column names
+#' @importFrom purrr map flatten_lgl
 isValidColumns = function (df){
   format = c("title", "authors", "year", "publisher", "source", "misc", "journal title", "doi")
   return (colnames(df) %>% tolower() %>% rdetect(., format) %>% 
@@ -65,7 +67,7 @@ preprocess_data = function (collection){
 #' @description The collection passed in must have the following specified columns:
 #' Title, Authors, Year, Publisher", Source, Misc, Journal Title, DOI
 #' @export 
-#' @import solrium
+#' @importFrom solrium SolrClient collection_exists collection_create
 
 index_collection = function (collection){
   if (!isValidColumns(collection)){
@@ -85,13 +87,3 @@ index_collection = function (collection){
   collection_create(conn, name = collection_name , numShards = 1)
   conn$add(data, collection_name)
 }
-
-#For testing purposes
-#If we are generalizing the indexing, we expect user to pass in all appropriate columns
-  #test = blm
-  #test$DOI = NA
-  #test$MISC = paste0("blm_", 1:nrow(test))
-  #test["Journal Title"] = paste0(NULL, 1:nrow(test))
-  #
-  #collection_delete(solrium::SolrClient$new(), name="test")
-  #index_collection(test)
