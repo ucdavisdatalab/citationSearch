@@ -39,33 +39,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="articles/citationSearch.html">Get started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/index.html">Indexing</a>
-    </li>
-    <li>
-      <a href="articles/search.html">Searching</a>
-    </li>
-    <li>
-      <a href="articles/webscrape.html">Webscraping</a>
-    </li>
-  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -80,7 +59,51 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-What the package does (one paragraph).
+
+<div id="citationsearch" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#citationsearch" class="anchor"></a>citationSearch</h1></div>
+<p>This package contains data and code for searching citations against several online libraries by using Solr.</p>
+<p>To be used in the main project repo: <a href="https://github.com/datalab-dev/tyler_scott/" class="uri">https://github.com/datalab-dev/tyler_scott/</a></p>
+</div>
+<div id="setup" class="section level1">
+<h1 class="hasAnchor">
+<a href="#setup" class="anchor"></a>Setup</h1>
+<p>Have Solr instance running.</p>
+<p>Install Solr from <a href="https://solr.apache.org" class="uri">https://solr.apache.org</a><br>
+Start an instance in cloud mode: <code>solr start -c</code></p>
+<p>Navigate to <a href="http://localhost:8983/solr/" class="uri">http://localhost:8983/solr/</a> to see if solr is running.</p>
+</div>
+<div id="installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1>
+<p>Clone this repo and install with <code>devtools</code> from within project directory</p>
+<pre><code><a href="https://devtools.r-lib.org//reference/install.html">devtools::install()</a></code></pre>
+</div>
+<div id="quick-start" class="section level1">
+<h1 class="hasAnchor">
+<a href="#quick-start" class="anchor"></a>Quick Start</h1>
+<p>These instructions walk through searching anystyle citations against the indexes. Assumes you don’t need to redownload the library record data, and instead will be using the versions that come with this package.</p>
+<p>First, load the package:</p>
+<pre><code><a href="https://rdrr.io/r/base/library.html">library(citationSearch)</a></code></pre>
+<p>Then build the index. This only needs to be done the first time.</p>
+<pre><code>index_all() # pass overwrite=TRUE to recreate the index</code></pre>
+<p>Search a single citation against the index:</p>
+<pre><code>citation = anystyle[1,] # take first record
+query = search_construct_query(citation)
+hits = search_collection("all", query)</code></pre>
+</div>
+<div id="working-on-this-package" class="section level1">
+<h1 class="hasAnchor">
+<a href="#working-on-this-package" class="anchor"></a>Working on this package</h1>
+<p>Make changes to the code, then run <code><a href="https://devtools.r-lib.org//reference/load_all.html">devtools::load_all()</a></code> and test them. To update documentation and NAMESPACE file <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code>.</p>
+</div>
+<div id="contact" class="section level1">
+<h1 class="hasAnchor">
+<a href="#contact" class="anchor"></a>Contact</h1>
+<p>Arthur Koehl avkoehl at ucdavis dot edu</p>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
