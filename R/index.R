@@ -1,18 +1,3 @@
-
-#' Check to see if user has the number of matching columns specified
-#' 
-#' 
-#' @param char colnames to check
-#' @param return bool
-validate_columns = function (cols){
-    expected = c("title", "authors", "year", "publisher", "doi", "source", "miscid")
-    miss = setdiff(expected, tolower(cols))
-    if (length(miss) > 0) {
-        stop(paste("missing the following columns:", paste(miss, collapse=", ")))
-    }
-    return (TRUE)
-}
-
 #' Create Combined column for authors and publishers
 #'
 #'
@@ -60,7 +45,7 @@ preprocess_data = function (collection){
 #' @export 
 #' @importFrom solrium SolrClient collection_exists collection_create
 index_records = function (records, name=paste0(substitute(records))){
-  validate_columns(colnames(collection))
+  validate_columns(colnames(collection), c("title", "authors", "year", "publisher", "doi", "journal_title", "source", "miscid"))
   conn = solrium::SolrClient$new()
   
   if (solrium::collection_exists(conn, collection_name)){
