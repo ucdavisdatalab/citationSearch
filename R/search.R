@@ -53,17 +53,17 @@ create_queries = function(citations) {
     citations["year"] = as.character(citations["year"])
 
     # for title, add phrase
-    citations$title = sapply(citations$title, add_phrase, "Title", 
+    citations$title = sapply(citations$title, add_phrase, "title", 
 			     USE.NAMES = FALSE)
     citations$title[citations$title == ""] = NA
 
     # for rest add field identifiers
     fn = c("authors", "year", "publisher", "doi", "journal_title")
-    citations$authors = add_field(citations$authors, "Authors")
-    citations$year = add_field(citations$year, "Year")
-    citations$publisher = add_field(citations$publisher, "Publisher")
-    citations$doi = add_field(citations$doi, "DOI")
-    citations$journal_title = add_field(citations$journal_title, "Journal_title")
+    citations$authors = add_field(citations$authors, "authors")
+    citations$year = add_field(citations$year, "year")
+    citations$publisher = add_field(citations$publisher, "publisher")
+    citations$doi = add_field(citations$doi, "doi")
+    citations$journal_title = add_field(citations$journal_title, "journal_title")
 
     # paste together
     citations[is.na(citations)] = ""

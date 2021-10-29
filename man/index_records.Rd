@@ -4,7 +4,7 @@
 \alias{index_records}
 \title{Create collection for index}
 \usage{
-index_records(records, name = paste0(substitute(records)))
+index_records(records, collection_name = paste0(substitute(records)))
 }
 \arguments{
 \item{records}{a dataframe to be indexed}
