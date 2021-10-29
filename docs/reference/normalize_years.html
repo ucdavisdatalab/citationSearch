@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Given search query, get top matches — search_collection • citationSearch</title>
+<title>Normalize anystyle dates — normalize_years • citationSearch</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Given search query, get top matches — search_collection" />
-<meta property="og:description" content="Given search query, get top matches" />
+<meta property="og:title" content="Normalize anystyle dates — normalize_years" />
+<meta property="og:description" content="Normalize anystyle dates" />
 
 
 
@@ -103,37 +103,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Given search query, get top matches</h1>
+    <h1>Normalize anystyle dates</h1>
     
-    <div class="hidden name"><code>search_collection.Rd</code></div>
+    <div class="hidden name"><code>normalize_years.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given search query, get top matches</p>
+    <p>Normalize anystyle dates</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_collection</span><span class='op'>(</span><span class='va'>collection_name</span>, <span class='va'>query_string</span>, conn <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>normalize_years</span><span class='op'>(</span><span class='va'>years</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>collection_name</th>
-      <td><p>string to search against</p></td>
-    </tr>
-    <tr>
-      <th>query_string</th>
-      <td><p>created with construct_query function</p></td>
-    </tr>
-    <tr>
-      <th>conn</th>
-      <td><p>optional SolrClient object</p></td>
+      <th>years</th>
+      <td><p>character or numeric vector</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe of top 5 results</p>
+    <p>years normalized</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

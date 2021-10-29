@@ -19,7 +19,8 @@ create_combined = function(authors, publishers) {
 #' @importFrom anytime anydate
 preprocess_data = function (collection){
   colnames(collection) = tolower(colnames(collection))
-  collection = collection[ , c("title", "authors", "year", "publisher", "source", "misc", "journal title", "doi")]
+  collection = collection[ , c("title", "authors", "year", "publisher",
+			       "source", "misc", "journal title", "doi")]
   colnames(collection) = c("Title", "Authors", "Year", 
                            "Publisher", "Source", "Journal", "MiscID", "DOI")
   
@@ -45,11 +46,14 @@ preprocess_data = function (collection){
 #' @export 
 #' @importFrom solrium SolrClient collection_exists collection_create
 index_records = function (records, name=paste0(substitute(records))){
-  validate_columns(colnames(collection), c("title", "authors", "year", "publisher", "doi", "journal_title", "source", "miscid"))
+  validate_columns(colnames(collection), c("title", "authors", "year",
+					   "publisher", "doi", "journal_title",
+					   "source", "miscid"))
   conn = solrium::SolrClient$new()
   
   if (solrium::collection_exists(conn, collection_name)){
-    warning("\"", collection_name, "\"", " collection already exits, not overwriting\n")
+    warning("\"", collection_name, "\"", " collection already exits, not
+	    overwriting\n")
     return (-1)
   }
   data = preprocess_data(records)

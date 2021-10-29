@@ -9,7 +9,6 @@
 #' @return dataframe of top 5 results
 #' @importFrom solrium SolrClient solr_search
 #' @export
-#'
 search_collection = function(collection_name, query_string, conn=NULL) {
     if (is.null(conn)) {
 	conn = solrium::SolrClient$new()
@@ -30,14 +29,16 @@ search_collection = function(collection_name, query_string, conn=NULL) {
 
 #' Convert dataframe of citations into search queries
 #'
-#'
+#' @param citations dataframe of citations
 #' @return search queries
+#' @export
 create_queries = function(citations) {
 
     # check input data
     valid = validate_columns(colnames(citations),
 		     expected=c("title", "authors", "year", "publisher", 
 				"doi", "journal_title"))
+    if(!valid) { stop("columns don't match expected") }	
 
     # for each string field:
     # normalize string
@@ -47,64 +48,50 @@ create_queries = function(citations) {
     # for year field
     # confirm either NA or 4 digit year
     # throw error
-    citations["year"] = as.numeric(citations["year"]) 
-    if (any(citations["year"] < 1800 || citations["year"] > 2022)) {
-	stop()
-    }
+    valid = validate_years(citations["year"])
+    if(!valid) { stop("years not within 1800 2025") }
+    citations["year"] = as.character(citations["year"])
 
     # for title, add phrase
+    citations$title = sapply(citations$title, add_phrase, "Title", 
+			     USE.NAMES = FALSE)
+    citations$title[citations$title == ""] = NA
 
     # for rest add field identifiers
+    fn = c("authors", "year", "publisher", "doi", "journal_title")
+    citations$authors = add_field(citations$authors, "Authors")
+    citations$year = add_field(citations$year, "Year")
+    citations$publisher = add_field(citations$publisher, "Publisher")
+    citations$doi = add_field(citations$doi, "DOI")
+    citations$journal_title = add_field(citations$journal_title, "Journal_title")
 
     # paste together
-
-    # return just queries
+    citations[is.na(citations)] = ""
+    combined = apply(citations[], 1, paste, collapse=" ") 
+    combined = stringr::str_trim(combined)
 }
 
+add_field = function(col, name) {
+    res = sapply(col, add_field_to_string, name, USE.NAMES=FALSE)
+    res[res == ""] = NA
+    res
+}
 
-    add_field_identifier = function (field, fieldname) {
-      if (is.null(field) | any(is.na(field))) {
-      	    return("")
-      	}
-      
-      field = trimws(field)
-      
-      if (nchar(field) == 0) {
-      	    return("")
-      	}
-      
-    	field = strsplit(field, " ")[[1]]
-    	field = na.omit(field)
-    	field = paste0(fieldname, field)
-    	paste0(field, collapse=" ")
+add_phrase = function(str, name) {
+    if(empty_string(str)) {
+	return ("")
     }
+    paste0(name, ":", str)
+}
 
-#' Convert Anystyle item to a search query string
-#' takes row, returns string
-#'
-#' @param anystyle_entry single row from anystyle output
-#' @return string suitable for solr search
-#' @export
-search_construct_query = function(anystyle_entry) {
+add_field_to_string = function(string, fieldname) {
+    elem = stringr::str_split(string, " ")[[1]]
+    elem = purrr::discard(elem, empty_string)
 
-    query_string = ""
-
-    anystyle_entry = preprocess_anystyle_entry(anystyle_entry)
-
-    authors = unlist(anystyle_entry$author)
-    if (length(authors) > 0) {
-    	authors = paste0("Authors:", authors)
-    	authors = paste0(authors, collapse=" ")
-    } else {
-	    authors = ""
+    res = ""
+    if (length(elem) > 0) {
+        res = paste0(fieldname, ":", elem)
+	res = paste0(res, collapse=" ")
     }
-    
-    journalTitle = add_field_identifier(anystyle_entry$`container-title`, 'Journal:')
-    publisher = add_field_identifier(anystyle_entry$publisher, "Publisher:")
-    # Want phrases for the title instead of word
-    title = ifelse(is.null(t1$title[[1]]), "Title:", paste0("Title:",t1$title))
-    year = add_field_identifier(anystyle_entry$date, "Year:")
-    doi = add_field_identifier(anystyle_entry$doi, "DOI:")
-
-    query_string = paste(authors, year, title, doi, publisher, journalTitle)
+    res
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/search.R
 \name{search_collection}
 \alias{search_collection}
-\title{Given Anystyle row, get top matches}
+\title{Given search query, get top matches}
 \usage{
 search_collection(collection_name, query_string, conn = NULL)
 }
 \arguments{
-\item{collection_name}{one of blm,treesearch,nfsl}
+\item{collection_name}{string to search against}
 
 \item{query_string}{created with construct_query function}
 
@@ -17,5 +17,5 @@ search_collection(collection_name, query_string, conn = NULL)
 dataframe of top 5 results
 }
 \description{
-Given Anystyle row, get top matches
+Given search query, get top matches
 }

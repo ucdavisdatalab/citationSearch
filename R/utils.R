@@ -20,17 +20,45 @@ check_doi = function(x) {
     grepl('/^10.\\d{4,9}/[-._;()/:A-Z0-9]+$/i', x)
 }
 
-
 #' Check to see if user has the number of matching columns specified
 #' 
 #' 
 #' @param cols char colnames to check
 #' @param expected char names to check against
 #' @param return bool
+#' @export
 validate_columns = function (cols, expected) {
     ms = setdiff(expected, tolower(cols))
     if (length(ms) > 0) {
-        stop(paste("missing the following columns:", paste(ms, collapse=", ")))
+	return(FALSE)
     }
     return (TRUE)
+}
+
+#' Check to see if user has the number of matching columns specified
+#' 
+#' 
+#' @param x years column
+#' @return bool
+#' @export
+validate_years = function(x) {
+    x = as.numeric(x)
+    x = x[!is.na(x)]
+    if (min(x) < 1800 | max(x) > 2025) {
+	return(FALSE)
+    }
+    return (TRUE)
+}
+
+#' Check if the contents of a string should be considered empty
+#' 
+#' Useful because of the ambiguity of our input data, use with purrr::discard
+#'
+#' @param x string to search, single value
+#' @return bool
+empty_string = function(x) {
+    if (x == "NULL" || x == "NA" || is.na(x) || x == "") {
+	return (TRUE)
+    }
+    FALSE
 }
