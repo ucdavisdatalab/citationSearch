@@ -19,9 +19,9 @@ search_collection = function(collection_name, query_string, conn=NULL) {
 				   name= collection_name,
 				   params = list(
 						 q = query_string,
-						 fl = c("Title", "Authors", 
-							"Publisher", "Year", 
-							"DOI", "Source",
+						 fl = c("title", "authors", 
+							"publisher", "year", 
+							"doi", "source",
 							"score"),
 						 rows = 5)
     )
@@ -81,7 +81,7 @@ add_phrase = function(str, name) {
     if(empty_string(str)) {
 	return ("")
     }
-    paste0(name, ":", str)
+    paste0('"', name, ":", str, '"')
 }
 
 add_field_to_string = function(string, fieldname) {
