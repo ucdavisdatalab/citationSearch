@@ -48,9 +48,9 @@ create_queries = function(citations) {
     # for year field
     # confirm either NA or 4 digit year
     # throw error
-    valid = validate_years(citations["year"])
+    valid = validate_years(citations$year)
     if(!valid) { stop("years not within 1800 2025") }
-    citations["year"] = as.character(citations["year"])
+    citations$year = as.character(citations$year)
 
     # for title, add phrase
     citations$title = sapply(citations$title, add_phrase, "title", 
