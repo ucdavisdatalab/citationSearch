@@ -13,5 +13,5 @@ normalize_string(x)
 normalized string
 }
 \description{
-Normalizes a string by setting to lowercase, filtering out punctation and digits
+Normalizes a string by setting to lowercase, filtering out punct and digits
 }

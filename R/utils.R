@@ -1,6 +1,6 @@
 #' Normalize a string
 #'
-#' Normalizes a string by setting to lowercase, filtering out punctation and digits
+#' Normalizes a string by setting to lowercase, filtering out punct and digits
 #' @param x string to normalize
 #' @return normalized string
 #' @export
@@ -35,7 +35,7 @@ validate_columns = function (cols, expected) {
     return (TRUE)
 }
 
-#' Check to see if user has the number of matching columns specified
+#' Check if years column contains only numbers between 1800 and 2025
 #' 
 #' 
 #' @param x years column
@@ -57,7 +57,8 @@ validate_years = function(x) {
 #' @param x string to search, single value
 #' @return bool
 empty_string = function(x) {
-    if (x == "NULL" || x == "NA" || is.na(x) || x == "") {
+    if (x== "null" || x == "na" || x == "NULL" || x == "NA" ||
+	is.na(x) || x == "") {
 	return (TRUE)
     }
     FALSE

@@ -4,12 +4,14 @@
 \alias{search_collection}
 \title{Given search query, get top matches}
 \usage{
-search_collection(collection_name, query_string, conn = NULL)
+search_collection(query_string, collection_name, topn = 1, conn = NULL)
 }
 \arguments{
+\item{query_string}{created with construct_query function}
+
 \item{collection_name}{string to search against}
 
-\item{query_string}{created with construct_query function}
+\item{topn}{optional number or results to return}
 
 \item{conn}{optional SolrClient object}
 }

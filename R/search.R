@@ -5,11 +5,12 @@
 #'
 #' @param collection_name string to search against
 #' @param query_string created with construct_query function
+#' @param topn optional number or results to return
 #' @param conn optional SolrClient object
 #' @return dataframe of top 5 results
 #' @importFrom solrium SolrClient solr_search
 #' @export
-search_collection = function(collection_name, query_string, conn=NULL) {
+search_collection = function(query_string, collection_name, topn=1,conn=NULL) {
     if (is.null(conn)) {
 	conn = solrium::SolrClient$new()
     }
@@ -22,8 +23,9 @@ search_collection = function(collection_name, query_string, conn=NULL) {
 						 fl = c("title", "authors", 
 							"publisher", "year", 
 							"doi", "source",
+							"journal_title",
 							"score"),
-						 rows = 5)
+						 rows = topn)
     )
 }
 

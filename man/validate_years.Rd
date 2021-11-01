@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{validate_years}
 \alias{validate_years}
-\title{Check to see if user has the number of matching columns specified}
+\title{Check if years column contains only numbers between 1800 and 2025}
 \usage{
 validate_years(x)
 }
@@ -13,5 +13,5 @@ validate_years(x)
 bool
 }
 \description{
-Check to see if user has the number of matching columns specified
+Check if years column contains only numbers between 1800 and 2025
 }
