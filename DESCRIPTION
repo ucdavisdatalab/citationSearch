@@ -1,13 +1,26 @@
 Package: citationSearch
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Search Citations Against Paper Metadata
+Version: 1.0.0
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c( 
+    person(given = "Arthur",
+           family = "Koehl",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "avkoehl@ucdavis.edu",
+           comment = c(ORCID = "https://orcid.org/0000-0003-0476-2144")),
+    person(given = "Tyler",
+           family = "Scott",
+           role = c("ctb")),
+    person(given = "Bi",
+           family = "Nguyen",
+           role = c("ctb"))
+	   )
+Description: 
+    citationSearch is an R package that provides an interface for creating a
+    searchable Solr index from a dataframe of records, as well as searching against
+    that index with a dataframe of parsed citations. It was designed to allow
+    searching citations against record metadata that is not contained in common
+    citation indexes, e.g government grey literature.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
