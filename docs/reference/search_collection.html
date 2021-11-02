@@ -112,18 +112,22 @@
     <p>Given search query, get top matches</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_collection</span><span class='op'>(</span><span class='va'>collection_name</span>, <span class='va'>query_string</span>, conn <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>search_collection</span><span class='op'>(</span><span class='va'>query_string</span>, <span class='va'>collection_name</span>, topn <span class='op'>=</span> <span class='fl'>1</span>, conn <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>query_string</th>
+      <td><p>created with construct_query function</p></td>
+    </tr>
+    <tr>
       <th>collection_name</th>
       <td><p>string to search against</p></td>
     </tr>
     <tr>
-      <th>query_string</th>
-      <td><p>created with construct_query function</p></td>
+      <th>topn</th>
+      <td><p>optional number or results to return</p></td>
     </tr>
     <tr>
       <th>conn</th>
