@@ -3,7 +3,7 @@
 #'
 #' @param records a dataframe to be indexed
 #' @description The collection passed in must have the following specified columns:
-#' Title, Authors, Year, Publisher", Source, Misc, Journal Title, DOI
+#' Title, Authors, Year, Publisher, Source, Miscid, Journal Title, DOI
 #' @export 
 #' @importFrom solrium SolrClient collection_exists collection_create
 index_records = function (records, 
